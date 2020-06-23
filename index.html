@@ -7,7 +7,7 @@
     <title></title>
   </head>
   <body>
-    <div id="chart" style="width: 600px; height: 500px"></div>
+    <div id="container" style="width: 600px; height: 500px"></div>
     <script type="text/javascript">
       // const client = new KeenAnalysis({
       // 	projectId: '5e429d77c9e77c0001a35cf1',
@@ -48,53 +48,50 @@
       // 		dataviz.render(res);
       // 	});
 
-        const client = new KeenAnalysis({
-                projectId: "5c87b64ec9e77c0001cf5b6e",
-                readKey:
-                  "FB952962910C97DE3E1C6A25EB2FC6B22FDB1ACA9D572948EA18227287BC4E12"
-              });
-              const chart = new KeenDataviz({
-                container: "#chart",
-                type: "area",
-                title: "Traffic by Source",
-                stacking: "normal",
-                showLoadingSpinner: true,
-                legend: {
-                  position: "bottom"
-                },
-                labelMapping: {
-                  apps: "Instagram",
-                  books: "Twitter",
-                  games: "Google",
-                  sounds: "FaceBook"
-                },
-                colorMapping: {
-                  Instagram: "#77A3BB", // column - color
-                  Twitter: "#9CC0A2",
-                  Google: "#F69F79",
-                  FaceBook: "#A689E9"
-                },
-                renderOnVisible: true
-                // palette: "autocollector"
-              });
-              client
-                .query({
-                  analysis_type: "count",
-                  event_collection: "mobile_purchases",
-                  timeframe: {
-                    start: "2019-03-20T00:00:00.000-00:00",
-                    end: "2019-03-26T00:00:00.000-00:00"
-                  },
-                  group_by: ["product.name"],
-                  interval: "daily"
-                })
-                .then(function(res) {
-                  // Handle the result
-                  chart.render(res);
-                })
-                .catch(function(err) {
-                  // Handle the error
-                  chart.message(err.message);
-                });
+      const client = new KeenAnalysis({
+        	projectId: '5c87b64ec9e77c0001cf5b6e',
+        	readKey: 'd41156a2ed478d074f9898f1a6ab742a501a434ea64e7d46026e3d75af633f6e83b94d7c4580dc29280e6d44f68f1a7a04c9c7c074fd77ee84e2384cdb98d3b718b62f5509e87a738824719d2ad1e596e535bff6748cd7a74ec21ceaed87ccde',
+        });
+        const dataviz = new KeenDataviz({
+        	type: 'area',
+        	container: '#container',
+        	widget: {
+        		title: {
+        			content: 'Traffic by Source',
+        		},
+        		subtitle: {
+        			content: 'Daily Results',
+        		},
+        	},
+        	settings: {
+        		margins: {
+        			top: 20,
+        			left: 45,
+        			right: 30,
+        			bottom: 35
+        		},
+        		curve: 'linear',
+            groupMode: 'stacked',
+            stackMode: 'normal',
+            theme: {
+          axisY: {
+            tickPadding: 13,
+              },
+            },
+        	},
+        });
+        client
+        	.query({
+        		analysis_type: 'count',
+        		event_collection: 'mobile_purchases',
+        		timeframe: {
+        			start: '2019-03-20T00:00:00.000-00:00',
+        			end: '2019-03-26T00:00:00.000-00:00',
+        		},
+        		group_by: ['product.name'],
+        		interval: 'daily',
+        	}).then((res) => {
+        		dataviz.render(res);
+        	});
     </script>
   </body>
